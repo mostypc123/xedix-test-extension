@@ -2,16 +2,26 @@
 import os
 import re
 
-# Try to find extension file or ask for path
-file_path = "extension_mainfn.py" if os.path.exists("extension_mainfn.py") else input("Path: ")
+# ALWAYS ask for path - no automatic detection
+file_path = input("Enter full path to extension file: ")
 
-# Read the file content
+# Verify path exists
+while not os.path.exists(file_path):
+    print(f"Error: Path '{file_path}' does not exist")
+    file_path = input("Enter full path to extension file: ")
+
+# Read and modify the file
 with open(file_path, "r") as f:
     content = f.read()
 
-# Insert print statement into main() function
-modified = re.sub(r'def main\(\):(.*?)(return|$)', r'def main():\1    print("hello world")\n\2', content, flags=re.DOTALL)
+modified = re.sub(
+    r'def main\(\):(.*?)(return|$)',
+    r'def main():\1    print("hello world")\n\2',
+    content,
+    flags=re.DOTALL
+)
 
-# Write back to file
 with open(file_path, "w") as f:
     f.write(modified)
+
+print(f"Successfully modified {file_path}")
