@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 import os
 import re
 
@@ -12,7 +11,6 @@ while not os.path.exists(file_path):
 # Read and modify the file
 with open(file_path, "r+") as f:
     content = f.read()
-    # Simple replacement - adds ONE print statement
     modified = re.sub(
         r'def main\(\):',
         'def main():\n    print("hello world")',
