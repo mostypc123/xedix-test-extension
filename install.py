@@ -2,26 +2,24 @@
 import os
 import re
 
-# ALWAYS ask for path - no automatic detection
-file_path = input("Enter full path to extension file: ")
+file_path = input("Path: ").strip()
 
 # Verify path exists
 while not os.path.exists(file_path):
-    print(f"Error: Path '{file_path}' does not exist")
-    file_path = input("Enter full path to extension file: ")
+    print(f"Error: Path '{file_path}' not found")
+    file_path = input("Path: ").strip()
 
 # Read and modify the file
-with open(file_path, "r") as f:
+with open(file_path, "r+") as f:
     content = f.read()
-
-modified = re.sub(
-    r'def main\(\):(.*?)(return|$)',
-    r'def main():\1    print("hello world")\n\2',
-    content,
-    flags=re.DOTALL
-)
-
-with open(file_path, "w") as f:
+    # Simple replacement - adds ONE print statement
+    modified = re.sub(
+        r'def main\(\):',
+        'def main():\n    print("hello world")',
+        content
+    )
+    f.seek(0)
     f.write(modified)
+    f.truncate()
 
-print(f"Successfully modified {file_path}")
+print(f"Modified {file_path}")
